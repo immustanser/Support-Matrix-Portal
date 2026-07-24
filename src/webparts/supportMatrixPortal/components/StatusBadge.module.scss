@@ -1,0 +1,56 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.statusActive {
+  background-color: #dff6dd;
+  color: #0e6b0e;
+}
+
+.statusUnderReview {
+  background-color: #fff4ce;
+  color: #8a6d00;
+}
+
+.statusToBeTransitioned {
+  background-color: #deecf9;
+  color: #0f5faa;
+}
+
+.statusDecommissioning {
+  background-color: #eee0f7;
+  color: #6b2fa0;
+}
+
+.statusDecommissioned {
+  background-color: #fde7e9;
+  color: #a4262c;
+}
+
+.statusDefault {
+  background-color: #f3f2f1;
+  color: #605e5c;
+}
+
+.tier1 {
+  background-color: #fde7e9;
+  color: #a4262c;
+}
+
+.tier2 {
+  background-color: #fff4ce;
+  color: #8a6d00;
+}
+
+.tier3 {
+  background-color: #deecf9;
+  color: #0f5faa;
+}

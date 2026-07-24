@@ -1,0 +1,33 @@
+.section {
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #201f1e;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #edebe9;
+}
+
+.fieldGroup {
+  margin-bottom: 14px;
+}
+
+.fieldRow2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.errorBar {
+  margin-bottom: 14px;
+}

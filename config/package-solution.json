@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "support-matrix-portal-client-side-solution",
+    "id": "b1e6a2c4-2b7a-4a3e-9c1a-0f1234567890",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.18.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Support Matrix Portal"
+      },
+      "longDescription": {
+        "default": "Support Matrix Portal - Centralized application support ownership and inventory dashboard"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Support Matrix Portal Feature",
+        "description": "Deploys the Support Matrix Portal web part",
+        "id": "e6a2c4b1-7a2b-3e4a-9c1a-0f1234567891",
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml"
+          ]
+        }
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/support-matrix-portal.sppkg"
+  }
+}

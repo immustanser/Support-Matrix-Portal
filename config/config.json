@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "support-matrix-portal-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/supportMatrixPortal/SupportMatrixPortalWebPart.js",
+          "manifest": "./src/webparts/supportMatrixPortal/SupportMatrixPortalWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "SupportMatrixPortalWebPartStrings": "lib/webparts/supportMatrixPortal/loc/{locale}.js"
+  }
+}

@@ -1,0 +1,99 @@
+.container {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.06);
+  border: 1px solid #edebe9;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #201f1e;
+  margin: 0 0 4px 0;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #605e5c;
+  margin: 0 0 16px 0;
+}
+
+.issuesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.issueCard {
+  border: 1px solid #edebe9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.issueHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  cursor: pointer;
+  background-color: #faf9f8;
+
+  &:hover {
+    background-color: #f3f2f1;
+  }
+}
+
+.issueLabel {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #323130;
+}
+
+.issueCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 11px;
+  background-color: #fde7e9;
+  color: #a4262c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.issueCountZero {
+  background-color: #dff6dd;
+  color: #0e6b0e;
+}
+
+.issueList {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 6px 14px 10px 14px;
+}
+
+.issueItem {
+  font-size: 13px;
+  color: #323130;
+  padding: 4px 0;
+  border-bottom: 1px solid #f3f2f1;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.noIssues {
+  font-size: 12.5px;
+  color: #a19f9d;
+  font-style: italic;
+  padding: 4px 14px 10px 14px;
+}
