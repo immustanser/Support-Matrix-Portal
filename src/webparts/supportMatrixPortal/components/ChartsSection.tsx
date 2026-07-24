@@ -69,7 +69,6 @@ const MiniBarChart: React.FC<{ title: string; data: IBarDatum[] }> = ({ title, d
 };
 
 export const ChartsSection: React.FC<IChartsSectionProps> = ({ applications }) => {
-  const byStatus = React.useMemo(() => buildDistribution(applications, (a) => a.status), [applications]);
   const byBusinessUnit = React.useMemo(() => buildDistribution(applications, (a) => a.businessUnitName), [applications]);
   const byVendor = React.useMemo(() => buildDistribution(applications, (a) => a.vendorName), [applications]);
   const byHostingModel = React.useMemo(() => buildDistribution(applications, (a) => a.hostingModel), [applications]);
@@ -80,7 +79,6 @@ export const ChartsSection: React.FC<IChartsSectionProps> = ({ applications }) =
 
   return (
     <div className={styles.chartsGrid}>
-      <MiniBarChart title="Applications by Status" data={byStatus} />
       <MiniBarChart title="Applications by Business Unit" data={byBusinessUnit.slice(0, 10)} />
       <MiniBarChart title="Applications by Vendor" data={byVendor.slice(0, 10)} />
       <MiniBarChart title="Applications by Hosting Model" data={byHostingModel} />

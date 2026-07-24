@@ -18,26 +18,20 @@ interface ICardDefinition {
 export const DashboardCards: React.FC<IDashboardCardsProps> = ({ applications }) => {
   const metrics = React.useMemo(() => {
     const total = applications.length;
-    const active = applications.filter((a) => a.active).length;
-    const decommissioned = applications.filter((a) => a.status === 'Decommissioned').length;
+    const operation = applications.filter((a) => a.applicationType === 'Operation').length;
     const vendorApps = applications.filter((a) => a.applicationType === 'Vendor Application').length;
-    const cloudApps = applications.filter((a) => a.hostingModel === 'Cloud').length;
-    const onPremApps = applications.filter((a) => a.hostingModel === 'On-Prem').length;
-    const tier1Apps = applications.filter((a) => a.tier === '1').length;
-    const missingPrimaryEngineer = applications.filter((a) => !a.primaryEngineer || !a.primaryEngineer.title).length;
+    const decommissioned = applications.filter((a) => a.applicationType === 'Decommissioned').length;
+    const toBeTransitioned = applications.filter((a) => a.applicationType === 'To Be Transitioned').length;
 
-    return { total, active, decommissioned, vendorApps, cloudApps, onPremApps, tier1Apps, missingPrimaryEngineer };
+    return { total, operation, vendorApps, decommissioned, toBeTransitioned };
   }, [applications]);
 
   const cards: ICardDefinition[] = [
-    { key: 'total', label: 'Total Applications', value: metrics.total, icon: 'AppIconDefaultList', colorClass: styles.colorBlue },
-    { key: 'active', label: 'Active Applications', value: metrics.active, icon: 'CheckMark', colorClass: styles.colorGreen },
-    { key: 'decommissioned', label: 'Decommissioned Applications', value: metrics.decommissioned, icon: 'Delete', colorClass: styles.colorRed },
+    { key: 'all', label: 'All', value: metrics.total, icon: 'AppIconDefaultList', colorClass: styles.colorBlue },
+    { key: 'operation', label: 'Operation', value: metrics.operation, icon: 'CheckMark', colorClass: styles.colorGreen },
     { key: 'vendor', label: 'Vendor Applications', value: metrics.vendorApps, icon: 'Handshake', colorClass: styles.colorPurple },
-    { key: 'cloud', label: 'Cloud Applications', value: metrics.cloudApps, icon: 'Cloud', colorClass: styles.colorTeal },
-    { key: 'onprem', label: 'On-Prem Applications', value: metrics.onPremApps, icon: 'HomeGroup', colorClass: styles.colorGray },
-    { key: 'tier1', label: 'Tier 1 Applications', value: metrics.tier1Apps, icon: 'Warning', colorClass: styles.colorOrange },
-    { key: 'missingpe', label: 'Missing Primary Engineer', value: metrics.missingPrimaryEngineer, icon: 'ContactCard', colorClass: styles.colorRed }
+    { key: 'decommissioned', label: 'Decommissioned', value: metrics.decommissioned, icon: 'Delete', colorClass: styles.colorRed },
+    { key: 'tobetransitioned', label: 'To be Transitioned', value: metrics.toBeTransitioned, icon: 'Warning', colorClass: styles.colorOrange }
   ];
 
   return (
