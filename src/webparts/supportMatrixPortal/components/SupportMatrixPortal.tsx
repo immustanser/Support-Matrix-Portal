@@ -27,6 +27,10 @@ export interface ISupportMatrixPortalProps {
 
 type LoadState = 'loading' | 'loaded' | 'error';
 
+const DASHBOARD_TAB_KEY = 'dashboard';
+const INVENTORY_TAB_KEY = 'inventory';
+const DATA_QUALITY_TAB_KEY = 'dataQuality';
+
 export const SupportMatrixPortal: React.FC<ISupportMatrixPortalProps> = ({ context }) => {
   const [loadState, setLoadState] = React.useState<LoadState>('loading');
   const [errorMessage, setErrorMessage] = React.useState<string>('');
@@ -49,6 +53,8 @@ export const SupportMatrixPortal: React.FC<ISupportMatrixPortalProps> = ({ conte
   const [applicationToDelete, setApplicationToDelete] = React.useState<IApplication | undefined>(undefined);
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
   const [deleteError, setDeleteError] = React.useState<string | undefined>(undefined);
+
+  const [selectedTabKey, setSelectedTabKey] = React.useState<string>(DASHBOARD_TAB_KEY);
 
   const currentUserEmail = context.pageContext.user.email || '';
 
@@ -125,6 +131,17 @@ export const SupportMatrixPortal: React.FC<ISupportMatrixPortalProps> = ({ conte
     });
   }, [applications, searchText, filters, myApplicationsOnly, currentUserEmail]);
 
+  const handleKpiClick = (applicationType: string): void => {
+    setFilters((prev) => ({ ...prev, applicationType }));
+    setSelectedTabKey(INVENTORY_TAB_KEY);
+  };
+
+  const handlePivotLinkClick = (item?: PivotItem): void => {
+    if (item && item.props.itemKey) {
+      setSelectedTabKey(item.props.itemKey);
+    }
+  };
+
   const handleViewDetails = (application: IApplication): void => {
     setSelectedApplication(application);
     setIsPanelOpen(true);
@@ -196,14 +213,18 @@ export const SupportMatrixPortal: React.FC<ISupportMatrixPortalProps> = ({ conte
 
       {loadState === 'loaded' && (
         <div className={styles.pivotWrap}>
-          <Pivot aria-label="Support Matrix Portal sections">
-            <PivotItem headerText="Dashboard" itemIcon="ViewDashboard">
+          <Pivot
+            aria-label="Support Matrix Portal sections"
+            selectedKey={selectedTabKey}
+            onLinkClick={handlePivotLinkClick}
+          >
+            <PivotItem headerText="Dashboard" itemIcon="ViewDashboard" itemKey={DASHBOARD_TAB_KEY}>
               <div className={styles.tabContent}>
-                <DashboardCards applications={applications} />
+                <DashboardCards applications={applications} onKpiClick={handleKpiClick} />
                 <ChartsSection applications={applications} />
               </div>
             </PivotItem>
-            <PivotItem headerText="Application Inventory" itemIcon="AppIconDefaultList">
+            <PivotItem headerText="Application Inventory" itemIcon="AppIconDefaultList" itemKey={INVENTORY_TAB_KEY}>
               <div className={styles.tabContent}>
                 <FiltersBar
                   searchText={searchText}
@@ -235,7 +256,7 @@ export const SupportMatrixPortal: React.FC<ISupportMatrixPortalProps> = ({ conte
                 />
               </div>
             </PivotItem>
-            <PivotItem headerText="Data Quality" itemIcon="Warning">
+            <PivotItem headerText="Data Quality" itemIcon="Warning" itemKey={DATA_QUALITY_TAB_KEY}>
               <div className={styles.tabContent}>
                 <DataQualityPanel applications={applications} onViewDetails={handleViewDetails} />
               </div>

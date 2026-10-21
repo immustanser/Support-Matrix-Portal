@@ -110,7 +110,7 @@ export const MULTI_PERSON_FIELD_NAMES: string[] = [
 /** Page size options for the applications table. */
 export const PAGE_SIZE_OPTIONS: number[] = [10, 25, 50, 100];
 
-export const DEFAULT_PAGE_SIZE = 25;
+export const DEFAULT_PAGE_SIZE = 10;
 
 /** Maximum number of items PnPjs will retrieve per underlying page request. */
 export const LIST_ITEM_BATCH_SIZE = 200;

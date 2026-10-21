@@ -5,6 +5,7 @@ import styles from './DashboardCards.module.scss';
 
 export interface IDashboardCardsProps {
   applications: IApplication[];
+  onKpiClick?: (applicationType: string) => void;
 }
 
 interface ICardDefinition {
@@ -13,9 +14,10 @@ interface ICardDefinition {
   value: number;
   icon: string;
   colorClass: string;
+  applicationType: string;
 }
 
-export const DashboardCards: React.FC<IDashboardCardsProps> = ({ applications }) => {
+export const DashboardCards: React.FC<IDashboardCardsProps> = ({ applications, onKpiClick }) => {
   const metrics = React.useMemo(() => {
     const total = applications.length;
     const operation = applications.filter((a) => a.applicationType === 'Operation').length;
@@ -27,17 +29,38 @@ export const DashboardCards: React.FC<IDashboardCardsProps> = ({ applications })
   }, [applications]);
 
   const cards: ICardDefinition[] = [
-    { key: 'all', label: 'All', value: metrics.total, icon: 'AppIconDefaultList', colorClass: styles.colorBlue },
-    { key: 'operation', label: 'Operation', value: metrics.operation, icon: 'CheckMark', colorClass: styles.colorGreen },
-    { key: 'vendor', label: 'Vendor Applications', value: metrics.vendorApps, icon: 'Handshake', colorClass: styles.colorPurple },
-    { key: 'decommissioned', label: 'Decommissioned', value: metrics.decommissioned, icon: 'Delete', colorClass: styles.colorRed },
-    { key: 'tobetransitioned', label: 'To be Transitioned', value: metrics.toBeTransitioned, icon: 'Warning', colorClass: styles.colorOrange }
+    { key: 'all', label: 'All', value: metrics.total, icon: 'AppIconDefaultList', colorClass: styles.colorBlue, applicationType: '' },
+    { key: 'operation', label: 'Operation', value: metrics.operation, icon: 'CheckMark', colorClass: styles.colorGreen, applicationType: 'Operation' },
+    { key: 'vendor', label: 'Vendor Applications', value: metrics.vendorApps, icon: 'Handshake', colorClass: styles.colorPurple, applicationType: 'Vendor Application' },
+    { key: 'decommissioned', label: 'Decommissioned', value: metrics.decommissioned, icon: 'Delete', colorClass: styles.colorRed, applicationType: 'Decommissioned' },
+    { key: 'tobetransitioned', label: 'To be Transitioned', value: metrics.toBeTransitioned, icon: 'Warning', colorClass: styles.colorOrange, applicationType: 'To Be Transitioned' }
   ];
+
+  const handleKpiClick = (card: ICardDefinition): void => {
+    if (onKpiClick) {
+      onKpiClick(card.applicationType);
+    }
+  };
+
+  const handleKpiKeyDown = (card: ICardDefinition) => (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault();
+      handleKpiClick(card);
+    }
+  };
 
   return (
     <div className={styles.cardsGrid}>
       {cards.map((card) => (
-        <div className={styles.card} key={card.key}>
+        <div
+          className={`${styles.card} ${styles.cardClickable}`}
+          key={card.key}
+          role="button"
+          tabIndex={0}
+          aria-label={`View ${card.label} applications (${card.value})`}
+          onClick={() => handleKpiClick(card)}
+          onKeyDown={handleKpiKeyDown(card)}
+        >
           <div className={`${styles.iconWrap} ${card.colorClass}`}>
             <Icon iconName={card.icon} />
           </div>

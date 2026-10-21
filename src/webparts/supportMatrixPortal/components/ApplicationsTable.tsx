@@ -57,7 +57,7 @@ export const ApplicationsTable: React.FC<IApplicationsTableProps> = ({
 
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [applications.length, pageSize]);
+  }, [applications, pageSize]);
 
   const sortedApplications = React.useMemo(() => {
     const copy = [...applications];
@@ -107,9 +107,15 @@ export const ApplicationsTable: React.FC<IApplicationsTableProps> = ({
       onColumnClick: () => onColumnClick('applicationName'),
       onRenderHeader: () => renderSortableHeader('Application Name', 'applicationName'),
       onRender: (item: IApplication) => (
-        <span className={styles.ellipsisCell} title={item.applicationName}>
+        <button
+          type="button"
+          className={`${styles.ellipsisCell} ${styles.nameLink}`}
+          title={item.applicationName}
+          aria-label={`View details for ${item.applicationName}`}
+          onClick={() => onViewDetails(item)}
+        >
           {item.applicationName}
-        </span>
+        </button>
       )
     },
     {
@@ -248,12 +254,6 @@ export const ApplicationsTable: React.FC<IApplicationsTableProps> = ({
       maxWidth: 130,
       onRender: (item: IApplication) => (
         <span className={styles.actionsCell}>
-          <IconButton
-            iconProps={{ iconName: 'View' }}
-            title="View Details"
-            ariaLabel="View Details"
-            onClick={() => onViewDetails(item)}
-          />
           {onEdit && (
             <IconButton
               iconProps={{ iconName: 'Edit' }}
