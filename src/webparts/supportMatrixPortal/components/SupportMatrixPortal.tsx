@@ -17,6 +17,7 @@ import { ApplicationsTable } from './ApplicationsTable';
 import { ApplicationDetailsPanel } from './ApplicationDetailsPanel';
 import { ApplicationFormPanel } from './ApplicationFormPanel';
 import { DataQualityPanel } from './DataQualityPanel';
+import { PeopleManagementPanel } from './PeopleManagementPanel';
 import { buildSearchIndex, getUniqueSortedValues, isUserOnApplication } from '../utils/applicationHelpers';
 import { CHOICE_VALUES, DEFAULT_PAGE_SIZE } from '../constants/ListConstants';
 import styles from './SupportMatrixPortal.module.scss';
@@ -29,6 +30,7 @@ type LoadState = 'loading' | 'loaded' | 'error';
 
 const DASHBOARD_TAB_KEY = 'dashboard';
 const INVENTORY_TAB_KEY = 'inventory';
+const PEOPLE_MGMT_TAB_KEY = 'peopleManagement';
 const DATA_QUALITY_TAB_KEY = 'dataQuality';
 
 export const SupportMatrixPortal: React.FC<ISupportMatrixPortalProps> = ({ context }) => {
@@ -85,6 +87,24 @@ export const SupportMatrixPortal: React.FC<ISupportMatrixPortalProps> = ({ conte
   React.useEffect(() => {
     loadData().catch((err) => console.error(err));
   }, [loadData]);
+
+  /**
+   * Refreshes the applications list from SharePoint WITHOUT toggling the top-level
+   * loadState to 'loading'. loadData() flips loadState to 'loading', which unmounts the
+   * entire loaded Pivot/tab tree (including PeopleManagementPanel) while data is
+   * refetched - that was destroying PeopleManagementPanel's local state (selectedPerson,
+   * removalResult, etc.) on every refresh before the operation-result message could be
+   * seen. People Management's post-removal refresh uses this silent variant instead so the
+   * tab stays mounted and its state (including the result message) survives the refresh.
+   */
+  const refreshApplicationsSilently = React.useCallback(async (): Promise<void> => {
+    try {
+      const apps = await SupportMatrixService.getApplications();
+      setApplications(apps);
+    } catch (error) {
+      console.error('Failed to refresh applications after People Management update:', error);
+    }
+  }, []);
 
   const businessUnitOptions = React.useMemo(() => getUniqueSortedValues(applications, (a) => a.businessUnitName), [applications]);
   const vendorOptions = React.useMemo(() => getUniqueSortedValues(applications, (a) => a.vendorName), [applications]);
@@ -254,6 +274,11 @@ export const SupportMatrixPortal: React.FC<ISupportMatrixPortalProps> = ({ conte
                   pageSize={pageSize}
                   onPageSizeChange={setPageSize}
                 />
+              </div>
+            </PivotItem>
+            <PivotItem headerText="People Management" itemIcon="People" itemKey={PEOPLE_MGMT_TAB_KEY}>
+              <div className={styles.tabContent}>
+                <PeopleManagementPanel applications={applications} onDataChanged={() => refreshApplicationsSilently().catch((err) => console.error(err))} />
               </div>
             </PivotItem>
             <PivotItem headerText="Data Quality" itemIcon="Warning" itemKey={DATA_QUALITY_TAB_KEY}>
