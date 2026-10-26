@@ -31,7 +31,7 @@ const EMPTY_FORM: IApplicationFormData = {
   tier: '',
   hostingModel: '',
   applicationType: '',
-  status: '',
+  status: 'Active',
   highLevelDetails: '',
   active: true,
   primaryEngineer: undefined,
@@ -187,8 +187,13 @@ export const ApplicationFormPanel: React.FC<IApplicationFormPanelProps> = ({
           />
           <Dropdown
             label="Status"
-            options={toOptions(CHOICE_VALUES.STATUS)}
-            selectedKey={formData.status}
+            options={toOptions(CHOICE_VALUES.STATUS_FORM_OPTIONS)}
+            selectedKey={CHOICE_VALUES.STATUS_FORM_OPTIONS.indexOf(formData.status) >= 0 ? formData.status : undefined}
+            placeholder={
+              formData.status && CHOICE_VALUES.STATUS_FORM_OPTIONS.indexOf(formData.status) < 0
+                ? `${formData.status} (legacy value - select to change)`
+                : 'Select status'
+            }
             onChange={(_, option) => updateField('status', option ? String(option.key) : '')}
           />
         </div>

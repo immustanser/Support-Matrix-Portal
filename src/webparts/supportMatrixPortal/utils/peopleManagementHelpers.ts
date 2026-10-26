@@ -1,6 +1,47 @@
 import { IApplication } from '../models/IApplication';
 import { IPersonAssignmentMatch } from '../models/IPeopleManagement';
+import { IPersonField } from '../models/IPersonField';
 import { PERSON_ROLE_DEFINITIONS, IPersonRoleDefinition } from '../constants/PersonRoleDefinitions';
+
+/**
+ * Builds a deduplicated list of every person currently assigned to at least one
+ * application, across every Person/Group role field defined in PERSON_ROLE_DEFINITIONS
+ * (single- and multi-value alike). This lets People Management find people - such as a
+ * former employee - who are still referenced in existing application data even if they
+ * can no longer be found through a live directory search.
+ *
+ * No directory/Graph calls are made here - only the identity data already present in the
+ * already-loaded Applications collection is used, so this stays a single pass over data
+ * the portal already has in memory.
+ */
+export const extractAssignedPeople = (applications: IApplication[]): IPersonField[] => {
+  const byId = new Map<number, IPersonField>();
+  const byEmail = new Map<string, IPersonField>();
+
+  applications.forEach((app) => {
+    PERSON_ROLE_DEFINITIONS.forEach((def) => {
+      def.getValue(app).forEach((person) => {
+        if (!person) {
+          return;
+        }
+        // Prefer the stable SharePoint user id for dedup; fall back to email/login only
+        // when an id is not available, since display names are not guaranteed unique.
+        if (person.id) {
+          if (!byId.has(person.id)) {
+            byId.set(person.id, person);
+          }
+          return;
+        }
+        const fallbackKey = (person.email || person.loginName || '').toLowerCase();
+        if (fallbackKey && !byEmail.has(fallbackKey)) {
+          byEmail.set(fallbackKey, person);
+        }
+      });
+    });
+  });
+
+  return Array.from(byId.values()).concat(Array.from(byEmail.values()));
+};
 
 /**
  * Finds every application where the given person (matched by SharePoint user id) appears

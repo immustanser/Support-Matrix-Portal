@@ -3,7 +3,7 @@
   "solution": {
     "name": "support-matrix-portal-client-side-solution",
     "id": "b1e6a2c4-2b7a-4a3e-9c1a-0f1234567890",
-    "version": "1.0.0.2",
+    "version": "1.0.0.3",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

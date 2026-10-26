@@ -108,7 +108,7 @@ export const SupportMatrixPortal: React.FC<ISupportMatrixPortalProps> = ({ conte
 
   const businessUnitOptions = React.useMemo(() => getUniqueSortedValues(applications, (a) => a.businessUnitName), [applications]);
   const vendorOptions = React.useMemo(() => getUniqueSortedValues(applications, (a) => a.vendorName), [applications]);
-  const statusOptions = CHOICE_VALUES.STATUS;
+  const statusOptions = CHOICE_VALUES.STATUS_FILTER_OPTIONS;
   const tierOptions = CHOICE_VALUES.TIER;
   const hostingModelOptions = CHOICE_VALUES.HOSTING_MODEL;
   const applicationTypeOptions = CHOICE_VALUES.APPLICATION_TYPE;

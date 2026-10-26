@@ -13,7 +13,7 @@ import { PersonFieldPicker } from './PersonFieldPicker';
 import { SupportMatrixService } from '../services/SupportMatrixService';
 import { PERSON_ROLE_DEFINITIONS } from '../constants/PersonRoleDefinitions';
 import { PAGE_SIZE_OPTIONS, DEFAULT_PAGE_SIZE } from '../constants/ListConstants';
-import { findPersonAssignments, computeRoleSummary, getRoleLabels } from '../utils/peopleManagementHelpers';
+import { findPersonAssignments, computeRoleSummary, getRoleLabels, extractAssignedPeople } from '../utils/peopleManagementHelpers';
 import { getUniqueSortedValues } from '../utils/applicationHelpers';
 import styles from './PeopleManagementPanel.module.scss';
 
@@ -39,6 +39,11 @@ export const PeopleManagementPanel: React.FC<IPeopleManagementPanelProps> = ({
   const [removalResult, setRemovalResult] = React.useState<IBulkRemovalResult | undefined>(undefined);
   const [removalResultPersonName, setRemovalResultPersonName] = React.useState<string>('');
   const [removalError, setRemovalError] = React.useState<string | undefined>(undefined);
+
+  // People already referenced in the loaded application data, across every Person/Group
+  // role field - lets the picker find someone (e.g. a former employee) who is still
+  // assigned somewhere even when they can no longer be found via live directory search.
+  const assignedPeople = React.useMemo(() => extractAssignedPeople(applications), [applications]);
 
   const allMatches = React.useMemo(
     () => findPersonAssignments(applications, selectedPerson?.id),
@@ -293,6 +298,7 @@ export const PeopleManagementPanel: React.FC<IPeopleManagementPanelProps> = ({
           itemLimit={1}
           selected={selectedPerson ? [selectedPerson] : []}
           onChange={handlePersonChange}
+          localDataset={assignedPeople}
         />
       </div>
 

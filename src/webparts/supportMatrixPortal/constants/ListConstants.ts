@@ -87,6 +87,10 @@ export const CHOICE_VALUES = {
   HOSTING_MODEL: ['Cloud', 'On-Prem', 'Hybrid'],
   APPLICATION_TYPE: ['Operation', 'Vendor Application', 'Decommissioned', 'To Be Transitioned'],
   STATUS: ['Active', 'Under Review', 'To Be Transitioned', 'Decommissioning', 'Decommissioned'],
+  /** Status filter options shown on the Application Inventory tab. UI-only restriction - does not affect stored data. */
+  STATUS_FILTER_OPTIONS: ['Active', 'Decommissioned'],
+  /** Status values selectable when creating/editing an application. UI-only restriction - existing legacy values on records are preserved as-is. */
+  STATUS_FORM_OPTIONS: ['Active', 'Decommissioned'],
   VENDOR_TYPE: ['Internal', 'External', 'Partner']
 };
 
